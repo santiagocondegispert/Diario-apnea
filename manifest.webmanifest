@@ -1,6 +1,6 @@
 {
-  "name": "Diario de Apnea",
-  "short_name": "Diario Apnea",
+  "name": "Diario de Pesca",
+  "short_name": "Diario Pesca",
   "description": "Diario personal de pesca submarina y apnea en la costa mediterránea.",
   "start_url": "./index.html",
   "scope": "./",
