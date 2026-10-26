@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b2730">
+<title>Diario de Pesca</title>
+<style>
+:root{--bg:#f3f6f4;--card:#fff;--ink:#142f35;--muted:#657b7d;--sea:#0d5961;--sea2:#16818a;--line:#dce7e3;--accent:#d4edb7;--sand:#f5e9d1;--red:#a33d35}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:15px}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:780px;margin:auto;padding:0 16px 100px}.hero{margin:0 -16px 18px;padding:25px 20px 22px;background:linear-gradient(145deg,#0b2730,#12636b);color:white;border-radius:0 0 26px 26px}.topline{display:flex;justify-content:space-between;align-items:center;color:#c7e6df;font-size:12px;letter-spacing:.1em;text-transform:uppercase}.hero h1{font-size:29px;line-height:1.1;margin:18px 0 8px;letter-spacing:-.04em}.hero p{margin:0;color:#d0e5e0;max-width:460px;line-height:1.5}.heroStats{display:flex;gap:10px;margin-top:22px}.heroStat{background:#ffffff14;border:1px solid #ffffff1f;border-radius:14px;padding:11px 13px;flex:1;min-width:0}.heroStat strong{display:block;font-size:23px}.heroStat span{font-size:11px;color:#c7e6df}.tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 15px}.tab{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:10px 14px;white-space:nowrap;font-weight:600}.tab.active{background:var(--sea);border-color:var(--sea);color:#fff}.section{display:none}.section.active{display:block}.heading{display:flex;justify-content:space-between;align-items:end;gap:10px;margin:9px 0 13px}.heading h2{margin:0;font-size:22px;letter-spacing:-.03em}.sub{font-size:13px;color:var(--muted);margin-top:4px}.btn{border:0;background:var(--sea);color:#fff;padding:12px 15px;border-radius:12px;font-weight:700}.btn.secondary{background:#e5efeb;color:var(--sea)}.btn.small{padding:9px 11px;font-size:13px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px #133c3510}.metric .label{font-size:12px;color:var(--muted)}.metric .value{font-size:26px;font-weight:800;margin:7px 0 3px;letter-spacing:-.04em}.metric .hint{font-size:12px;color:var(--muted)}.barrow{margin:13px 0}.barlabel{display:flex;justify-content:space-between;font-size:13px;gap:10px}.bartrack{height:7px;background:#e6eeeb;border-radius:99px;overflow:hidden;margin-top:7px}.barfill{height:100%;background:var(--sea2);border-radius:99px}.empty{padding:26px 15px;text-align:center;color:var(--muted);line-height:1.5}.empty strong{display:block;color:var(--ink);font-size:17px;margin-bottom:7px}.trip{display:flex;justify-content:space-between;gap:12px;align-items:start}.trip h3{margin:0 0 5px;font-size:16px}.trip p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}.trip .right{text-align:right;white-space:nowrap}.trip .right strong{font-size:18px;display:block}.form-section{border-top:1px solid var(--line);padding-top:17px;margin-top:18px}.form-section:first-of-type{border-top:0;padding-top:0;margin-top:0}.form-section h3{font-size:17px;margin:0 0 13px;letter-spacing:-.02em}.actionchecks{display:flex;gap:18px;flex-wrap:wrap}.actionchecks label{display:flex;align-items:center;gap:7px;font-size:14px;color:var(--ink)}.actionchecks input{width:auto}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:700;color:#466166}.field input,.field select,.field textarea{width:100%;border:1px solid #d4e0dc;border-radius:11px;background:#fbfdfc;padding:11px 12px;color:var(--ink);min-width:0}.field input[type="date"],.field input[type="time"]{display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;font-size:16px;}.field textarea{min-height:78px;resize:vertical}.formactions{display:flex;gap:9px;margin-top:16px}.sightings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px}.sightings-grid label{display:flex;align-items:center;gap:8px;font-size:14px;line-height:1.35}.sightings-grid input{width:18px;height:18px;flex:0 0 auto}.formactions button{flex:1}.muted{color:var(--muted)}.notice{font-size:12px;line-height:1.5;color:var(--muted);background:#edf4f0;border-radius:12px;padding:12px}.speciesLine{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}.speciesLine:last-child{border-bottom:0}.speciesLine span{font-size:13px}.speciesLine strong{font-size:14px}.catchrow{border:1px solid var(--line);border-radius:13px;padding:12px;margin:9px 0}.catchhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-weight:700}.catchgrid{display:grid;grid-template-columns:1.4fr .7fr .8fr;gap:8px}.catchgrid label{font-size:11px;color:var(--muted);display:block;margin-bottom:5px}.catchgrid input,.catchgrid select{width:100%;min-width:0;padding:9px 7px;border:1px solid var(--line);border-radius:9px;background:#fbfdfc}.footer{font-size:11px;color:var(--muted);text-align:center;margin:25px 0}
+@media(min-width:600px){.hero{margin-top:16px;border-radius:24px}.app{padding-left:22px;padding-right:22px}.hero{margin-left:0;margin-right:0}.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:600px){.formgrid{grid-template-columns:minmax(0,1fr);gap:12px}.catchgrid{grid-template-columns:minmax(0,1fr)}.catchgrid .speciesfield{grid-column:auto}.sightings-grid{grid-template-columns:minmax(0,1fr)}.formactions{flex-direction:column}.heroStat{padding:9px}.heroStat strong{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hero">
+ <div class="topline"><span>🌊 Diario personal de pesca</span><span>V 0.2</span></div>
+ <h1>Diario de Pesca</h1>
+ <p>Registra cada salida. Aprende qué zonas, condiciones y especies te ofrecen mejores jornadas.</p>
+ <div class="heroStats"><div class="heroStat"><strong id="totalTrips">0</strong><span>Salidas</span></div><div class="heroStat"><strong id="totalFish">0</strong><span>Capturas</span></div><div class="heroStat"><strong id="totalHours">0 h</strong><span>Tiempo en el agua</span></div></div>
+</header>
+<nav class="tabs">
+ <button class="tab active" data-tab="dashboard">Resumen</button><button class="tab" data-tab="new">＋ Nueva salida</button><button class="tab" data-tab="history">Historial</button><button class="tab" data-tab="insights">Conclusiones</button><button class="tab" data-tab="data">Mis datos</button>
+</nav>
+<section id="dashboard" class="section active">
+ <div class="heading"><div><h2>Tu actividad</h2><div class="sub">Un vistazo a tu diario de pesca</div></div><button class="btn small" onclick="showTab('new')">＋ Registrar</button></div>
+ <div class="grid">
+  <div class="card metric"><div class="label">Capturas por salida</div><div class="value" id="avgCatch">—</div><div class="hint">Media de todas las salidas</div></div>
+  <div class="card metric"><div class="label">Salidas con captura</div><div class="value" id="successRate">—</div><div class="hint">Porcentaje de salidas</div></div>
+  <div class="card metric"><div class="label">Especie principal</div><div class="value" id="topSpecies" style="font-size:20px">—</div><div class="hint">Por número de ejemplares</div></div>
+  <div class="card metric"><div class="label">Zona más visitada</div><div class="value" id="topSpot" style="font-size:18px">—</div><div class="hint">Según tus registros</div></div>
+ </div>
+ <div class="card"><div class="heading"><div><h2 style="font-size:18px">Últimas salidas</h2><div class="sub">Tu actividad más reciente</div></div><button class="btn secondary small" onclick="showTab('history')">Ver todas</button></div><div id="recentTrips"></div></div>
+ <div class="notice">Los análisis se basan únicamente en tus registros. Añade también las salidas sin capturas para evitar conclusiones sesgadas.</div>
+</section>
+<section id="new" class="section">
+ <div class="heading"><div><h2 id="formTitle">Registrar salida</h2><div class="sub">Completa lo que recuerdes; los campos avanzados son opcionales.</div></div></div>
+ <form id="tripForm" class="card">
+  <input type="hidden" id="editId">
+  <div class="form-section">
+   <h3>1. Fecha y lugar</h3>
+   <div class="formgrid">
+    <div class="field"><label for="date">Fecha *</label><input id="date" type="date" required></div>
+    <div class="field"><label for="spot">Zona *</label><input id="spot" placeholder="Ej. cala o zona" required list="spots"><datalist id="spots"></datalist></div>
+    <div class="field"><label for="start">Hora de entrada</label><input id="start" type="time"></div>
+    <div class="field"><label for="duration">Tiempo en el agua (min)</label><input id="duration" type="number" min="0" step="5" placeholder="120"></div>
+   </div>
+  </div>
+
+  <div class="form-section">
+   <h3>2. Condiciones de la jornada de pesca</h3>
+   <div class="formgrid">
+    <div class="field"><label for="visibility">Visibilidad</label><select id="visibility"><option value="">No indicada</option><option>Mala (0–3 m)</option><option>Media (3–5 m)</option><option>Buena (5–10 m)</option><option>Muy buena (+12 m)</option></select></div>
+    <div class="field"><label for="waterTemp">Temperatura del agua (°C)</label><input id="waterTemp" type="number" min="0" step=".1" placeholder="19"></div>
+    <div class="field"><label for="wind">Viento</label><select id="wind"><option value="">No indicado</option><option>Nada (calma)</option><option>Suave (~5 kt)</option><option>Medio (~10 kt)</option><option>Fuerte (+15 kt)</option><option>Muy fuerte (+25 kt)</option></select></div>
+    <div class="field"><label for="windDir">Dirección del viento</label><select id="windDir"><option value="">No indicada</option><option>N</option><option>NE</option><option>E</option><option>SE</option><option>S</option><option>SO</option><option>O</option><option>NO</option></select></div>
+    <div class="field"><label for="sea">Estado del mar</label><select id="sea"><option value="">No indicado</option><option>Plato</option><option>Rizado</option><option>Pequeña marejada</option><option>Marejada</option><option>Picado</option></select></div>
+    <div class="field"><label for="swell">Oleaje (m)</label><select id="swell"><option value="">No indicado</option><option value="0">Nada (0 m)</option><option value="0.5">0,5 m</option><option value="1">1 m</option><option value="1.5">1,5 m</option><option value="2">2 m</option></select></div>
+    <div class="field"><label for="swellDir">Dirección del oleaje</label><select id="swellDir"><option value="">No indicada</option><option>N</option><option>NE</option><option>E</option><option>SE</option><option>S</option><option>SO</option><option>O</option><option>NO</option></select></div>
+    <div class="field"><label for="sky">Cielo</label><select id="sky"><option value="">No indicado</option><option>Despejado</option><option>Parcialmente nublado</option><option>Nublado</option><option>Lluvia</option></select></div>
+    <div class="field"><label for="moon">Luna</label><select id="moon"><option value="">No indicada</option><option>Nueva</option><option>Creciente</option><option>Llena</option><option>Menguante</option></select></div>
+    <div class="field"><label for="tide">Marea</label><select id="tide"><option value="">No indicada</option><option>Subiendo</option><option>Alta / parada</option><option>Bajando</option><option>Baja / parada</option><option>No lo sé</option></select></div>
+   </div>
+  </div>
+
+  <div class="form-section">
+   <h3>3. Condiciones de la jornada anterior</h3>
+   <p class="sub" style="margin:0 0 12px">Para registrar si el viento, el mar o el oleaje de ayer pudieron influir en la jornada de hoy.</p>
+   <div class="formgrid">
+    <div class="field"><label for="prevWind">Viento de ayer</label><select id="prevWind"><option value="">No indicado</option><option>Nada (calma)</option><option>Suave (~5 kt)</option><option>Medio (~10 kt)</option><option>Fuerte (+15 kt)</option><option>Muy fuerte (+25 kt)</option></select></div>
+    <div class="field"><label for="prevWindDir">Dirección del viento de ayer</label><select id="prevWindDir"><option value="">No indicada</option><option>N</option><option>NE</option><option>E</option><option>SE</option><option>S</option><option>SO</option><option>O</option><option>NO</option></select></div>
+    <div class="field"><label for="prevSea">Estado del mar de ayer</label><select id="prevSea"><option value="">No indicado</option><option>Plato</option><option>Rizado</option><option>Pequeña marejada</option><option>Marejada</option><option>Picado</option></select></div>
+    <div class="field"><label for="prevSwell">Oleaje de ayer (m)</label><select id="prevSwell"><option value="">No indicado</option><option value="0">Nada (0 m)</option><option value="0.5">0,5 m</option><option value="1">1 m</option><option value="1.5">1,5 m</option><option value="2">2 m</option></select></div>
+    <div class="field"><label for="prevSwellDir">Dirección del oleaje de ayer</label><select id="prevSwellDir"><option value="">No indicada</option><option>N</option><option>NE</option><option>E</option><option>SE</option><option>S</option><option>SO</option><option>O</option><option>NO</option></select></div>
+   </div>
+  </div>
+
+  <div class="form-section">
+   <h3>4. Descripción de la jornada</h3>
+   <div class="formgrid">
+    <div class="field"><label for="suit">Traje</label><select id="suit"><option value="">No indicado</option><option>No</option><option>Corto</option><option>3 mm</option><option>5 mm</option><option>7 mm</option></select></div>
+    <div class="field"><label for="gun">Fusil</label><select id="gun"><option value="">No indicado</option><option>Fusb90</option><option>FFsub100</option><option>75</option><option>Otro</option></select></div>
+    <div class="field"><label for="depthMode">Profundidad de pesca</label><select id="depthMode"><option value="">No indicada</option><option>Superficie</option><option>Mixto</option><option>Fondo</option></select></div>
+    <div class="field"><label for="depth">Profundidad habitual (m)</label><input id="depth" type="number" min="0" step="1" placeholder="8"></div>
+    <div class="field full"><label>Acciones esporádicas</label><div class="actionchecks"><label><input id="actionSurface" type="checkbox"> Superficie</label><label><input id="actionBottom" type="checkbox"> Fondo</label></div></div>
+   </div>
+  </div>
+
+  <div class="form-section">
+   <h3>5. Resultado de la jornada</h3>
+   <div class="formgrid" style="margin-bottom:14px">
+    <div class="field"><label for="marineActivity">Actividad marina</label><select id="marineActivity"><option value="">No indicada</option><option>Nula</option><option>Baja</option><option>Media</option><option>Alta</option><option>Muy alta</option></select></div>
+   </div>
+   <div class="field" style="margin-bottom:14px"><label>Especies grandes avistadas</label><p class="sub" style="margin:0 0 8px">Marca las especies que has visto durante la jornada, aunque no hayas capturado ninguna.</p><div class="sightings-grid" id="sightingsGrid"><label><input type="checkbox" name="sighting" value="Sargo"> Sargo</label><label><input type="checkbox" name="sighting" value="Sargo breado"> Sargo breado</label><label><input type="checkbox" name="sighting" value="Lubina"> Lubina</label><label><input type="checkbox" name="sighting" value="Dorada"> Dorada</label><label><input type="checkbox" name="sighting" value="Mero"> Mero</label><label><input type="checkbox" name="sighting" value="Dentón"> Dentón</label><label><input type="checkbox" name="sighting" value="Salmonete"> Salmonete</label><label><input type="checkbox" name="sighting" value="Caproig"> Caproig</label><label><input type="checkbox" name="sighting" value="Barracuda"> Barracuda</label><label><input type="checkbox" name="sighting" value="Pez limón"> Pez limón</label><label><input type="checkbox" name="sighting" value="Palomentón"> Palomentón</label><label><input type="checkbox" name="sighting" value="Pejerrey"> Pejerrey</label><label><input type="checkbox" name="sighting" value="Chopa"> Chopa</label><label><input type="checkbox" name="sighting" value="Otros"> Otros</label></div></div>
+   <div class="heading"><div><div class="sub">Añade una línea por cada especie capturada.</div></div><button type="button" class="btn secondary small" id="addCatch">＋ Especie</button></div>
+   <div id="catches"></div>
+   <div class="formgrid" style="margin-top:10px">
+    <div class="field"><label for="noCatch">Resultado</label><select id="noCatch"><option value="auto">Calcular según capturas</option><option value="yes">Sin capturas</option><option value="no">Hubo capturas</option></select></div>
+   </div>
+  </div>
+
+  <div class="form-section">
+   <h3>6. Comentarios / observaciones</h3>
+   <div class="field"><label for="notes">Descripción libre de la jornada</label><textarea id="notes" placeholder="Describe la jornada: zonas exploradas, comportamiento de los peces, sensaciones, qué funcionó, etc."></textarea></div>
+  </div>
+  <div class="formactions"><button class="btn" type="submit">Guardar salida</button><button class="btn secondary" type="button" id="cancelEdit">Limpiar</button></div>
+ </form>
+ <div class="notice">Registra también las salidas con cero capturas. Así podrás comparar las condiciones con una base más realista.</div>
+</section>
+<section id="history" class="section"><div class="heading"><div><h2>Historial</h2><div class="sub">Consulta, edita o elimina salidas.</div></div><button class="btn small" onclick="showTab('new')">＋ Nueva</button></div><div class="card"><div class="field"><label for="searchHistory">Buscar por zona o especie</label><input id="searchHistory" placeholder="Ej. lubina, Begur, dorada…"></div></div><div id="historyList"></div></section>
+<section id="insights" class="section"><div class="heading"><div><h2>Conclusiones</h2><div class="sub">Patrones observados en tus registros.</div></div></div><div id="insightContent"></div><div class="notice">La mejor condición es el mejor resultado observado en tu diario, no una garantía de actividad futura. Con pocas salidas, las muestras son pequeñas. Esta app no ofrece recomendaciones de seguridad para apnea: comprueba siempre las condiciones y no pesques solo.</div></section>
+<section id="data" class="section">
+ <div class="heading"><div><h2>Tus datos</h2><div class="sub">Copias de seguridad y exportación.</div></div></div>
+ <div class="card"><h3 style="margin-top:0">Sincronización con Google Sheets</h3><p class="muted" style="line-height:1.5">Introduce la URL de la aplicación web de Google Apps Script y la clave privada que hayas configurado allí. La app conservará una copia local y sincronizará las jornadas con las hojas “Jornadas” y “Capturas”.</p><div class="field" style="margin:12px 0"><label for="sheetsUrl">URL de Apps Script</label><input id="sheetsUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec"></div><div class="field" style="margin:12px 0"><label for="sheetsToken">Clave de conexión</label><input id="sheetsToken" type="password" placeholder="La clave definida en Code.gs" autocomplete="off"></div><div class="formactions"><button class="btn" id="connectSheets">Guardar conexión</button><button class="btn secondary" id="loadCloud">Cargar desde Sheets</button><button class="btn secondary" id="syncCloud">Subir registros</button></div><p id="cloudStatus" class="muted" role="status" style="margin-top:12px">Aún no se ha configurado Google Sheets.</p></div><div class="card"><h3 style="margin-top:0">Copia de seguridad</h3><p class="muted">También puedes exportar una copia manual en cualquier momento.</p><div class="formactions"><button class="btn" id="exportJson">Exportar copia JSON</button><button class="btn secondary" id="exportCsv">Exportar CSV</button></div></div>
+ <div class="card"><h3 style="margin-top:0">Restaurar una copia</h3><p class="muted">Importar un JSON sustituirá los registros actuales.</p><input type="file" id="importFile" accept=".json,application/json" style="width:100%;margin:8px 0 14px"><button class="btn secondary" id="importBtn">Importar copia</button></div>
+ <div class="card"><h3 style="margin-top:0">Borrar todos los registros</h3><p class="muted">Esta acción no se puede deshacer.</p><button class="btn" style="background:var(--red)" id="deleteAll">Borrar todos los datos</button></div>
+</section>
+<div class="footer">DIARIO DE PESCA · Diario de Pesca v0.4 · sincronización opcional con Google Sheets · Respeta la normativa local, las vedas y las tallas mínimas.</div>
+</div>
+<script>
+const KEY='diario_apnea_v1';
+let trips=loadTrips(),catchDrafts=[];
+const $=id=>document.getElementById(id);
+const speciesOptions=['Lubina','Sargo','Dorada','Lisa','Salpa','Dentón','Denton','Corva','Mero','Congrio','Pulpo','Sepia','Langosta','Bogavante','Serviola','Bonito','Espetón','Otros'];
+function loadTrips(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
+function saveTrips(){localStorage.setItem(KEY,JSON.stringify(trips));renderAll();if(getCloudConfig().url)syncToCloud(false)}
+const CLOUD_URL_KEY='diario_apnea_sheets_url';
+const CLOUD_TOKEN_KEY='diario_apnea_sheets_token';
+function getCloudConfig(){return {url:(localStorage.getItem(CLOUD_URL_KEY)||'').trim(),token:localStorage.getItem(CLOUD_TOKEN_KEY)||''}}
+function setCloudStatus(msg,isError=false){const el=$('cloudStatus');if(el){el.textContent=msg;el.style.color=isError?'var(--red)':''}}
+function initCloudSettings(){const c=getCloudConfig();if($('sheetsUrl'))$('sheetsUrl').value=c.url;if($('sheetsToken'))$('sheetsToken').value=c.token;if(c.url)setCloudStatus('Conexión configurada. Pulsa “Cargar desde Sheets” para descargar los registros en la nube.')}
+function cloudConfigured(){const c=getCloudConfig();return /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec/.test(c.url)&&c.token.length>=8}
+function connectCloud(){const url=$('sheetsUrl').value.trim(),token=$('sheetsToken').value.trim();if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec/.test(url)){setCloudStatus('La URL no parece una URL de despliegue de Apps Script terminada en /exec.',true);return}if(token.length<8){setCloudStatus('La clave debe tener al menos 8 caracteres.',true);return}localStorage.setItem(CLOUD_URL_KEY,url);localStorage.setItem(CLOUD_TOKEN_KEY,token);setCloudStatus('Conexión guardada en este navegador. Pulsa “Cargar desde Sheets” para probarla.')}
+function loadFromCloud(){
+ if(!cloudConfigured()){setCloudStatus('Configura primero la URL y la clave de conexión.',true);return}
+ const c=getCloudConfig();setCloudStatus('Conectando con Google Sheets…');
+ let endpoint;
+ try{endpoint=new URL(c.url);endpoint.search='';endpoint.hash='';endpoint.pathname=endpoint.pathname.replace(/\/+$/,'')}
+ catch(e){setCloudStatus('La URL guardada no es válida. Vuelve a copiar la URL de Apps Script terminada en /exec.',true);return}
+ const cb='apneaCloudCallback_'+Date.now();let finished=false;
+ const cleanup=()=>{const old=document.getElementById(cb+'_script');if(old)old.remove();if(window[cb])delete window[cb]};
+ window[cb]=function(result){if(finished)return;finished=true;cleanup();if(!result||!result.ok){setCloudStatus('Apps Script respondió, pero rechazó la carga. Comprueba la clave y los permisos.',true);return}if(!Array.isArray(result.trips)){setCloudStatus('La respuesta de Sheets no tiene el formato esperado.',true);return}trips=result.trips;localStorage.setItem(KEY,JSON.stringify(trips));renderAll();setCloudStatus('Cargadas '+trips.length+' jornadas desde Google Sheets.')};
+ endpoint.searchParams.set('action','load');endpoint.searchParams.set('token',c.token);endpoint.searchParams.set('callback',cb);endpoint.searchParams.set('_',String(Date.now()));
+ const s=document.createElement('script');s.id=cb+'_script';s.async=true;s.src=endpoint.toString();
+ s.onerror=()=>{if(finished)return;finished=true;cleanup();setCloudStatus('El navegador no ha podido cargar la respuesta de Google. La URL y la clave parecen configuradas; prueba a actualizar la app y, si persiste, envíame una captura de este mensaje.',true)};
+ document.body.appendChild(s);
+ setTimeout(()=>{if(!finished){finished=true;cleanup();setCloudStatus('Google no ha respondido en 20 segundos. Comprueba la conexión y vuelve a intentarlo.',true)}},20000)
+}
+function syncToCloud(showStatus=true){if(!cloudConfigured()){if(showStatus)setCloudStatus('Configura primero la URL y la clave de conexión.',true);return}const c=getCloudConfig();if(showStatus)setCloudStatus('Enviando '+trips.length+' jornadas a Google Sheets…');const frameName='apneaSyncFrame';let frame=document.getElementById(frameName);if(!frame){frame=document.createElement('iframe');frame.name=frameName;frame.id=frameName;frame.style.display='none';document.body.appendChild(frame)}let form=document.getElementById('apneaSyncForm');if(form)form.remove();form=document.createElement('form');form.id='apneaSyncForm';form.method='POST';form.action=c.url;form.target=frameName;form.style.display='none';const fields={action:'save',token:c.token,payload:JSON.stringify({trips})};Object.entries(fields).forEach(([name,value])=>{const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.appendChild(input)});document.body.appendChild(form);frame.onload=()=>{if(showStatus)setCloudStatus('Solicitud enviada. Comprueba la hoja “Jornadas” y “Capturas” para confirmar que se han actualizado.')};form.submit();setTimeout(()=>form.remove(),3000)}
+$('connectSheets')?.addEventListener('click',connectCloud);
+$('loadCloud')?.addEventListener('click',loadFromCloud);
+$('syncCloud')?.addEventListener('click',()=>syncToCloud(true));
+initCloudSettings();
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function num(v){return v!==''&&v!=null&&Number.isFinite(Number(v))?Number(v):null}
+function fmtDate(s){if(!s)return 'Fecha sin indicar';let [y,m,d]=s.split('-');return `${d}/${m}/${y}`}
+function totalCatch(t){return (t.catches||[]).reduce((n,c)=>n+(Number(c.count)||0),0)}
+function duration(t){if(t.duration!=null&&t.duration!=='')return Number(t.duration);if(t.start&&t.end){let [h,m]=t.start.split(':').map(Number),[h2,m2]=t.end.split(':').map(Number),d=h2*60+m2-(h*60+m);return d<0?d+1440:d}return 0}
+function fmtDuration(min){return min>=60?`${Math.floor(min/60)} h${min%60?` ${min%60} min`:''}`:`${min} min`}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function showTab(id){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));if(id==='new'&&!$('editId').value)$('date').value||=new Date().toISOString().slice(0,10);renderAll();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+function renderStats(){
+ let fish=trips.reduce((n,t)=>n+totalCatch(t),0),mins=trips.reduce((n,t)=>n+duration(t),0),successful=trips.filter(t=>totalCatch(t)>0).length;
+ $('totalTrips').textContent=trips.length;$('totalFish').textContent=fish;$('totalHours').textContent=(mins/60).toFixed(mins%60?1:0)+' h';
+ $('avgCatch').textContent=trips.length?(fish/trips.length).toFixed(1):'—';$('successRate').textContent=trips.length?Math.round(successful/trips.length*100)+'%':'—';
+ let sp={},spots={};trips.forEach(t=>{(t.catches||[]).forEach(c=>{if(c.species)sp[c.species]=(sp[c.species]||0)+(Number(c.count)||0)});if(t.spot)spots[t.spot]=(spots[t.spot]||0)+1});
+ $('topSpecies').textContent=Object.keys(sp).sort((a,b)=>sp[b]-sp[a])[0]||'—';$('topSpot').textContent=Object.keys(spots).sort((a,b)=>spots[b]-spots[a])[0]||'—';
+}
+function tripCard(t){let fish=totalCatch(t);return `<div class="card"><div class="trip"><div style="min-width:0"><h3>${esc(t.spot||'Zona sin indicar')}</h3><p>${fmtDate(t.date)}${t.start?' · '+esc(t.start):''}${duration(t)?' · '+fmtDuration(duration(t))+' en el agua':''}</p><p>${esc((t.catches||[]).map(c=>`${c.species}${c.count>1?' ×'+c.count:''}${c.weight?' ('+c.weight+' kg)':''}`).join(', ')||'Sin capturas registradas')}</p><p style="margin-top:7px">${[t.sea&&'Mar: '+t.sea,t.wind&&'Viento: '+t.wind,t.visibility&&'Visibilidad: '+t.visibility,t.swell!==''&&t.swell!=null?'Oleaje: '+t.swell+' m':'',t.depthMode&&'Pesca: '+t.depthMode,t.marineActivity&&'Actividad marina: '+t.marineActivity].filter(Boolean).map(esc).join(' · ')}</p>${(t.largeSightings||[]).length?`<p style="margin-top:6px">Avistamientos: ${esc(t.largeSightings.join(', '))}</p>`:''}</div><div class="right"><strong>${fish}</strong><span class="muted" style="font-size:11px">capturas</span><div style="margin-top:10px;display:flex;gap:5px"><button class="btn secondary small" onclick="editTrip('${t.id}')">Editar</button><button class="btn secondary small" onclick="deleteTrip('${t.id}')">×</button></div></div></div></div>`}
+function renderRecent(){let arr=[...trips].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,3);$('recentTrips').innerHTML=arr.length?arr.map(tripCard).join(''):`<div class="empty"><strong>Aún no hay salidas</strong>Registra tu primera jornada para empezar.</div>`}
+function renderHistory(){let q=$('searchHistory').value.toLowerCase();let arr=[...trips].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).filter(t=>(t.spot+' '+(t.catches||[]).map(c=>c.species).join(' ')).toLowerCase().includes(q));$('historyList').innerHTML=arr.length?arr.map(tripCard).join(''):`<div class="card empty"><strong>No hay salidas que mostrar</strong>${trips.length?'Prueba otra búsqueda.':'Cuando guardes una salida, aparecerá aquí.'}</div>`}
+$('searchHistory').addEventListener('input',renderHistory);
+function addCatchRow(c={}){let id=uid();catchDrafts.push({id,...c});renderCatchRows()}
+function renderCatchRows(){$('catches').innerHTML=catchDrafts.length?catchDrafts.map((c,i)=>`<div class="catchrow" data-catch="${c.id}"><div class="catchhead"><span>Especie ${i+1}</span><button type="button" class="btn secondary small" onclick="removeCatch('${c.id}')">Quitar</button></div><div class="catchgrid"><div class="speciesfield"><label>Especie</label><input data-k="species" list="speciesList" placeholder="Ej. sargo" value="${esc(c.species||'')}"></div><div><label>Ejemplares</label><input data-k="count" type="number" min="1" step="1" value="${esc(c.count??1)}"></div><div><label>Peso total (kg)</label><input data-k="weight" type="number" min="0" step=".01" placeholder="Opcional" value="${esc(c.weight??'')}"></div><div><label>Talla aprox. (cm)</label><input data-k="length" type="number" min="0" step="1" placeholder="Opcional" value="${esc(c.length??'')}"></div><div><label>Zona / profundidad</label><input data-k="depth" type="text" placeholder="Opcional" value="${esc(c.depth??'')}"></div><div><label>Actividad</label><select data-k="activity"><option value="">No indicada</option>${['Baja','Media','Alta'].map(x=>`<option ${c.activity===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="speciesfield" style="grid-column:1/-1"><label>Observaciones de la captura</label><input data-k="notes" placeholder="Ej. estaba cazando cerca de roca" value="${esc(c.notes||'')}"></div></div></div>`).join(''):`<div class="empty" style="padding:15px">Sin capturas añadidas. Guarda la salida igualmente si no has pescado nada.</div>`}
+function removeCatch(id){catchDrafts=catchDrafts.filter(c=>c.id!==id);renderCatchRows()}
+$('addCatch').addEventListener('click',()=>addCatchRow());
+$('catches').addEventListener('input',e=>{let row=e.target.closest('[data-catch]');if(!row)return;let c=catchDrafts.find(x=>x.id===row.dataset.catch);if(c)c[e.target.dataset.k]=e.target.value});
+$('catches').addEventListener('change',e=>{let row=e.target.closest('[data-catch]');if(!row)return;let c=catchDrafts.find(x=>x.id===row.dataset.catch);if(c)c[e.target.dataset.k]=e.target.value});
+function resetForm(){ $('tripForm').reset();$('editId').value='';$('formTitle').textContent='Registrar salida';$('date').value=new Date().toISOString().slice(0,10);catchDrafts=[];renderCatchRows()}
+$('cancelEdit').addEventListener('click',resetForm);
+$('tripForm').addEventListener('submit',e=>{e.preventDefault();let cs=catchDrafts.filter(c=>String(c.species||'').trim()).map(c=>({species:String(c.species).trim(),count:Math.max(1,Number(c.count)||1),weight:num(c.weight),length:num(c.length),depth:c.depth||'',activity:c.activity||'',notes:c.notes||''}));let t={id:$('editId').value||uid(),date:$('date').value,spot:$('spot').value.trim(),start:$('start').value,duration:num($('duration').value),visibility:$('visibility').value,waterTemp:num($('waterTemp').value),wind:$('wind').value,windDir:$('windDir').value,sea:$('sea').value,swell:$('swell').value,swellDir:$('swellDir').value,sky:$('sky').value,moon:$('moon').value,tide:$('tide').value,prevWind:$('prevWind').value,prevWindDir:$('prevWindDir').value,prevSea:$('prevSea').value,prevSwell:$('prevSwell').value,prevSwellDir:$('prevSwellDir').value,suit:$('suit').value,gun:$('gun').value,depthMode:$('depthMode').value,depth:num($('depth').value),sporadicActions:[$('actionSurface').checked?'Superficie':'',$('actionBottom').checked?'Fondo':''].filter(Boolean),notes:$('notes').value,noCatch:$('noCatch').value,marineActivity:$('marineActivity').value,largeSightings:[...document.querySelectorAll('input[name="sighting"]:checked')].map(x=>x.value),catches:cs};if(t.noCatch==='yes')t.catches=[];let i=trips.findIndex(x=>x.id===t.id);if(i>=0)trips[i]=t;else trips.push(t);saveTrips();resetForm();showTab('history');});
+function editTrip(id){let t=trips.find(x=>x.id===id);if(!t)return;showTab('new');$('editId').value=t.id;$('formTitle').textContent='Editar salida';['date','spot','start','duration','visibility','waterTemp','wind','windDir','sea','swell','swellDir','sky','moon','tide','prevWind','prevWindDir','prevSea','prevSwell','prevSwellDir','suit','gun','depthMode','depth','notes','noCatch','marineActivity'].forEach(k=>{if($(k))$(k).value=t[k]??(k==='noCatch'?'auto':'')});let sightings=t.largeSightings||[];document.querySelectorAll('input[name="sighting"]').forEach(x=>x.checked=sightings.includes(x.value));let actions=t.sporadicActions||[];$('actionSurface').checked=actions.includes('Superficie');$('actionBottom').checked=actions.includes('Fondo');catchDrafts=(t.catches||[]).map(c=>({id:uid(),...c}));renderCatchRows();$('formTitle').scrollIntoView({behavior:'smooth',block:'start'})}
+function deleteTrip(id){if(!confirm('¿Eliminar esta salida?'))return;trips=trips.filter(t=>t.id!==id);saveTrips()}
+function groupStats(key){let g={};trips.forEach(t=>{let k=key(t);if(!k)return;if(!g[k])g[k]={trips:0,fish:0,mins:0,successful:0};g[k].trips++;g[k].fish+=totalCatch(t);g[k].mins+=duration(t);if(totalCatch(t)>0)g[k].successful++});return Object.entries(g).map(([name,v])=>({name,...v,rate:v.trips?v.successful/v.trips:0,perHour:v.mins?v.fish/(v.mins/60):0,perTrip:v.fish/v.trips})).sort((a,b)=>b.perHour-a.perHour)}
+function bars(title,items,format=x=>x.toFixed(1),valueKey='perHour'){if(!items.length)return `<p class="muted">Aún no hay datos suficientes.</p>`;let max=Math.max(...items.map(x=>x[valueKey]),.01);return `<h3 style="font-size:16px;margin:0 0 12px">${title}</h3>`+items.slice(0,5).map(x=>`<div class="barrow"><div class="barlabel"><span>${esc(x.name)} <span class="muted">(${x.trips} salidas)</span></span><strong>${format(x[valueKey])}</strong></div><div class="bartrack"><div class="barfill" style="width:${Math.max(3,x[valueKey]/max*100)}%"></div></div></div>`).join('')}
+function renderInsights(){
+ if(!trips.length){$('insightContent').innerHTML='<div class="card empty"><strong>Primero, crea tu diario</strong>Después de registrar algunas salidas, verás comparaciones de zonas, horarios, condiciones y especies.</div>';return}
+ let species={};trips.forEach(t=>(t.catches||[]).forEach(c=>{if(!c.species)return;let s=species[c.species]||(species[c.species]={count:0,weight:0,tripIds:new Set(),activity:{}});s.count+=Number(c.count)||0;s.weight+=Number(c.weight)||0;s.tripIds.add(t.id);if(c.activity)s.activity[c.activity]=(s.activity[c.activity]||0)+1}));
+ let bySpot=groupStats(t=>t.spot),bySea=groupStats(t=>t.sea),byWind=groupStats(t=>t.wind),byVis=groupStats(t=>t.visibility!==''&&t.visibility!=null?`${t.visibility} m`:''),byHour=groupStats(t=>t.start?`${(Math.floor(Number(t.start.split(':')[0])/3)*3).toString().padStart(2,'0')}:00–${(Math.floor(Number(t.start.split(':')[0])/3)*3+3).toString().padStart(2,'0')}:00`:'' );
+ let speciesHtml=Object.entries(species).sort((a,b)=>b[1].count-a[1].count).map(([name,s])=>`<div class="speciesLine"><span><strong>${esc(name)}</strong><br><span class="muted">${s.tripIds.size} salidas con captura${s.weight?' · '+s.weight.toFixed(2)+' kg':''}</span></span><strong>${s.count} ejemplares</strong></div>`).join('');
+ let conditions=[['Mar',bySea],['Viento',byWind],['Visibilidad',byVis],['Franja de entrada',byHour]];
+ let conditionHtml=conditions.map(([name,data])=>`<div class="card">${bars('Capturas por hora según '+name,data,x=>x.toFixed(2)+' / h')}</div>`).join('');
+ let recommendations=[];
+ if(trips.length<5)recommendations.push('Llevas '+trips.length+' salida(s). Registra al menos 5–10 salidas, incluidas las que no tengan capturas, antes de sacar conclusiones firmes.');
+ if(bySpot.length&&trips.length>=3){let best=bySpot[0];if(best.trips>=2)recommendations.push(`La zona “${best.name}” muestra de momento ${best.perHour.toFixed(2)} capturas por hora en ${best.trips} salidas. Compárala con otras zonas en condiciones similares.`)}
+ let bestSpecies=Object.entries(species).sort((a,b)=>b[1].count-a[1].count)[0];if(bestSpecies)recommendations.push(`La especie más registrada es ${bestSpecies[0]} (${bestSpecies[1].count} ejemplares). Añade profundidad, visibilidad y actividad observada para explorar qué condiciones coinciden con su presencia.`);
+ $('insightContent').innerHTML=`<div class="grid"><div class="card metric"><div class="label">Salidas analizadas</div><div class="value">${trips.length}</div></div><div class="card metric"><div class="label">Capturas por hora</div><div class="value">${(trips.reduce((n,t)=>n+totalCatch(t),0)/(trips.reduce((n,t)=>n+duration(t),0)/60||1)).toFixed(2)}</div></div></div><div class="card"><h3 style="margin-top:0">Especies registradas</h3>${speciesHtml||'<p class="muted">Todavía no hay especies registradas. Recuerda que las salidas sin captura también cuentan.</p>'}</div><div class="card">${bars('Zonas con mejor rendimiento observado',bySpot,x=>x.toFixed(2)+' capt./h')}</div>${conditionHtml}<div class="card"><h3 style="margin-top:0">Lecturas iniciales</h3>${recommendations.map(r=>`<p style="line-height:1.5">• ${esc(r)}</p>`).join('')}<p class="muted" style="font-size:12px">Las comparaciones solo incluyen las salidas con el dato correspondiente. No son predicciones científicas; una diferencia puede deberse a la época, duración, zona u otros factores.</p></div>`;
+}
+function renderSpots(){let vals=[...new Set(trips.map(t=>t.spot).filter(Boolean))];$('spots').innerHTML=vals.map(x=>`<option value="${esc(x)}">`).join('')}
+function renderAll(){renderStats();renderRecent();renderHistory();renderInsights();renderSpots()}
+function download(name,content,type){let blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+$('exportJson').addEventListener('click',()=>download('diario-apnea-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(trips,null,2),'application/json'));
+$('exportCsv').addEventListener('click',()=>{let headers=['fecha','zona','hora_entrada','duracion_min','visibilidad_categoria','temperatura_agua_c','viento','direccion_viento','estado_mar','oleaje_m','direccion_oleaje','cielo','luna','marea','viento_dia_anterior','direccion_viento_dia_anterior','estado_mar_dia_anterior','oleaje_dia_anterior_m','direccion_oleaje_dia_anterior','traje','fusil','profundidad_pesca','profundidad_habitual_m','acciones_esporadicas','observaciones','actividad_marina','especies_grandes_avistadas','especie','cantidad','peso_kg','talla_cm','profundidad_captura','actividad_especie','observaciones_captura'];let rows=[headers];trips.forEach(t=>{let cs=t.catches?.length?t.catches:[{}];cs.forEach(c=>rows.push([t.date,t.spot,t.start,duration(t),t.visibility,t.waterTemp,t.wind,t.windDir,t.sea,t.swell,t.swellDir,t.sky,t.moon,t.tide,t.prevWind,t.prevWindDir,t.prevSea,t.prevSwell,t.prevSwellDir,t.suit,t.gun,t.depthMode,t.depth,(t.sporadicActions||[]).join(', '),t.notes,t.marineActivity,(t.largeSightings||[]).join(', '),c.species,c.count,c.weight,c.length,c.depth,c.activity,c.notes]))});let csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');download('diario-apnea-'+new Date().toISOString().slice(0,10)+'.csv','\ufeff'+csv,'text/csv;charset=utf-8')});
+$('importBtn').addEventListener('click',async()=>{let f=$('importFile').files[0];if(!f){alert('Selecciona un archivo JSON primero.');return}try{let parsed=JSON.parse(await f.text());if(!Array.isArray(parsed))throw new Error();if(!confirm('Esto sustituirá los registros actuales. ¿Continuar?'))return;trips=parsed;saveTrips();alert('Copia importada correctamente.')}catch(e){alert('No se ha podido importar. Comprueba que sea una copia JSON válida de Diario de Apnea.')}});
+$('deleteAll').addEventListener('click',()=>{if(confirm('¿Seguro que quieres borrar todas las salidas? Esta acción no se puede deshacer.')){trips=[];saveTrips();alert('Se han borrado los registros.')}});
+resetForm();renderAll();
+</script>
+</body>
+</html>
