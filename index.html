@@ -138,7 +138,7 @@ function loadFromCloud(){
  let endpoint;
  try{endpoint=new URL(c.url);endpoint.search='';endpoint.hash='';endpoint.pathname=endpoint.pathname.replace(/\/+$/,'')}
  catch(e){setCloudStatus('La URL guardada no es válida. Vuelve a copiar la URL de Apps Script terminada en /exec.',true);return}
- const cb='apneaCloudCallback_'+Date.now();let finished=false;
+ const cb='apneaCloudCallback';let finished=false;
  const cleanup=()=>{const old=document.getElementById(cb+'_script');if(old)old.remove();if(window[cb])delete window[cb]};
  window[cb]=function(result){if(finished)return;finished=true;cleanup();if(!result||!result.ok){setCloudStatus('Apps Script respondió, pero rechazó la carga. Comprueba la clave y los permisos.',true);return}if(!Array.isArray(result.trips)){setCloudStatus('La respuesta de Sheets no tiene el formato esperado.',true);return}trips=result.trips;localStorage.setItem(KEY,JSON.stringify(trips));renderAll();setCloudStatus('Cargadas '+trips.length+' jornadas desde Google Sheets.')};
  endpoint.searchParams.set('action','load');endpoint.searchParams.set('token',c.token);endpoint.searchParams.set('callback',cb);endpoint.searchParams.set('_',String(Date.now()));
