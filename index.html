@@ -15,7 +15,7 @@
 <body>
 <div class="app">
 <header class="hero">
- <div class="topline"><span>🌊 Diario personal de pesca</span><span>V 0.2</span></div>
+ <div class="topline"><span>🌊 Diario personal de pesca</span><span>v0.6</span></div>
  <h1>Diario de Pesca</h1>
  <p>Registra cada salida. Aprende qué zonas, condiciones y especies te ofrecen mejores jornadas.</p>
  <div class="heroStats"><div class="heroStat"><strong id="totalTrips">0</strong><span>Salidas</span></div><div class="heroStat"><strong id="totalFish">0</strong><span>Capturas</span></div><div class="heroStat"><strong id="totalHours">0 h</strong><span>Tiempo en el agua</span></div></div>
@@ -112,11 +112,11 @@
 <section id="insights" class="section"><div class="heading"><div><h2>Conclusiones</h2><div class="sub">Patrones observados en tus registros.</div></div></div><div id="insightContent"></div><div class="notice">La mejor condición es el mejor resultado observado en tu diario, no una garantía de actividad futura. Con pocas salidas, las muestras son pequeñas. Esta app no ofrece recomendaciones de seguridad para apnea: comprueba siempre las condiciones y no pesques solo.</div></section>
 <section id="data" class="section">
  <div class="heading"><div><h2>Tus datos</h2><div class="sub">Copias de seguridad y exportación.</div></div></div>
- <div class="card"><h3 style="margin-top:0">Sincronización con Google Sheets</h3><p class="muted" style="line-height:1.5">Introduce la URL de la aplicación web de Google Apps Script y la clave privada que hayas configurado allí. La app conservará una copia local y sincronizará las jornadas con las hojas “Jornadas” y “Capturas”.</p><div class="field" style="margin:12px 0"><label for="sheetsUrl">URL de Apps Script</label><input id="sheetsUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec"></div><div class="field" style="margin:12px 0"><label for="sheetsToken">Clave de conexión</label><input id="sheetsToken" type="password" placeholder="La clave definida en Code.gs" autocomplete="off"></div><div class="formactions"><button class="btn" id="connectSheets">Guardar conexión</button><button class="btn secondary" id="loadCloud">Cargar desde Sheets</button><button class="btn secondary" id="syncCloud">Subir registros</button></div><p id="cloudStatus" class="muted" role="status" style="margin-top:12px">Aún no se ha configurado Google Sheets.</p></div><div class="card"><h3 style="margin-top:0">Copia de seguridad</h3><p class="muted">También puedes exportar una copia manual en cualquier momento.</p><div class="formactions"><button class="btn" id="exportJson">Exportar copia JSON</button><button class="btn secondary" id="exportCsv">Exportar CSV</button></div></div>
+ <div class="card"><h3 style="margin-top:0">Sincronización con Google Sheets</h3><p class="muted" style="line-height:1.5">Introduce la URL de la aplicación web de Google Apps Script y la clave privada que hayas configurado allí. La app conserva una copia en este dispositivo y sincroniza las jornadas con las hojas “Jornadas” y “Capturas”.</p><div class="field" style="margin:12px 0"><label for="sheetsUrl">URL de Apps Script</label><input id="sheetsUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec"></div><div class="field" style="margin:12px 0"><label for="sheetsToken">Clave de conexión</label><input id="sheetsToken" type="password" placeholder="La clave definida en Code.gs" autocomplete="off"></div><div class="formactions"><button class="btn" id="connectSheets">Guardar y probar</button><button class="btn secondary" id="testCloud">Probar conexión</button></div><div class="formactions"><button class="btn secondary" id="loadCloud">Cargar desde Sheets</button><button class="btn secondary" id="syncCloud">Subir todos mis registros</button></div><p id="cloudStatus" class="muted" role="status" style="margin-top:12px;line-height:1.5">Aún no se ha configurado Google Sheets.</p><p id="cloudPending" class="muted" style="font-size:12px;margin:0"></p><p class="muted" style="font-size:12px;line-height:1.5">Cada salida que guardes o borres se envía sola a Sheets. Si no hay conexión, queda pendiente y se reintenta. Cargar y subir combinan los datos: nunca se borra la hoja entera.</p></div><div class="card"><h3 style="margin-top:0">Copia de seguridad</h3><p class="muted">También puedes exportar una copia manual en cualquier momento.</p><div class="formactions"><button class="btn" id="exportJson">Exportar copia JSON</button><button class="btn secondary" id="exportCsv">Exportar CSV</button></div></div>
  <div class="card"><h3 style="margin-top:0">Restaurar una copia</h3><p class="muted">Importar un JSON sustituirá los registros actuales.</p><input type="file" id="importFile" accept=".json,application/json" style="width:100%;margin:8px 0 14px"><button class="btn secondary" id="importBtn">Importar copia</button></div>
  <div class="card"><h3 style="margin-top:0">Borrar todos los registros</h3><p class="muted">Esta acción no se puede deshacer.</p><button class="btn" style="background:var(--red)" id="deleteAll">Borrar todos los datos</button></div>
 </section>
-<div class="footer">DIARIO DE PESCA · Diario de Pesca v0.4 · sincronización opcional con Google Sheets · Respeta la normativa local, las vedas y las tallas mínimas.</div>
+<div class="footer">DIARIO DE PESCA · Diario de Pesca v0.6 · sincronización opcional con Google Sheets · Respeta la normativa local, las vedas y las tallas mínimas.</div>
 </div>
 <script>
 const KEY='diario_apnea_v1';
@@ -124,33 +124,72 @@ let trips=loadTrips(),catchDrafts=[];
 const $=id=>document.getElementById(id);
 const speciesOptions=['Lubina','Sargo','Dorada','Lisa','Salpa','Dentón','Denton','Corva','Mero','Congrio','Pulpo','Sepia','Langosta','Bogavante','Serviola','Bonito','Espetón','Otros'];
 function loadTrips(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
-function saveTrips(){localStorage.setItem(KEY,JSON.stringify(trips));renderAll();if(getCloudConfig().url)syncToCloud(false)}
+function saveTrips(){localStorage.setItem(KEY,JSON.stringify(trips));renderAll();if(cloudConfigured())syncToCloud(false)}
+// ===== Sincronización con Google Sheets (v2) =====
+// La app solo envía cambios (jornadas creadas/editadas e ids borrados); nunca reemplaza la hoja entera.
 const CLOUD_URL_KEY='diario_apnea_sheets_url';
 const CLOUD_TOKEN_KEY='diario_apnea_sheets_token';
+const PENDING_KEY='diario_apnea_pendientes';
+const CLOUD_API='diario-pesca-v2';
+let cloudBusy=false,cloudAgain=false;
 function getCloudConfig(){return {url:(localStorage.getItem(CLOUD_URL_KEY)||'').trim(),token:localStorage.getItem(CLOUD_TOKEN_KEY)||''}}
+function cloudConfigured(){const c=getCloudConfig();return /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(c.url)&&c.token.length>=8}
 function setCloudStatus(msg,isError=false){const el=$('cloudStatus');if(el){el.textContent=msg;el.style.color=isError?'var(--red)':''}}
-function initCloudSettings(){const c=getCloudConfig();if($('sheetsUrl'))$('sheetsUrl').value=c.url;if($('sheetsToken'))$('sheetsToken').value=c.token;if(c.url)setCloudStatus('Conexión configurada. Pulsa “Cargar desde Sheets” para descargar los registros en la nube.')}
-function cloudConfigured(){const c=getCloudConfig();return /^https:\/\/script\.google\.com\/macros\/s\/.+\/exec/.test(c.url)&&c.token.length>=8}
-function connectCloud(){const url=$('sheetsUrl').value.trim(),token=$('sheetsToken').value.trim();if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec/.test(url)){setCloudStatus('La URL no parece una URL de despliegue de Apps Script terminada en /exec.',true);return}if(token.length<8){setCloudStatus('La clave debe tener al menos 8 caracteres.',true);return}localStorage.setItem(CLOUD_URL_KEY,url);localStorage.setItem(CLOUD_TOKEN_KEY,token);setCloudStatus('Conexión guardada en este navegador. Pulsa “Cargar desde Sheets” para probarla.')}
-function loadFromCloud(){
- if(!cloudConfigured()){setCloudStatus('Configura primero la URL y la clave de conexión.',true);return}
- const c=getCloudConfig();setCloudStatus('Conectando con Google Sheets…');
- let endpoint;
- try{endpoint=new URL(c.url);endpoint.search='';endpoint.hash='';endpoint.pathname=endpoint.pathname.replace(/\/+$/,'')}
- catch(e){setCloudStatus('La URL guardada no es válida. Vuelve a copiar la URL de Apps Script terminada en /exec.',true);return}
- const cb='apneaCloudCallback';let finished=false;
- const cleanup=()=>{const old=document.getElementById(cb+'_script');if(old)old.remove();if(window[cb])delete window[cb]};
- window[cb]=function(result){if(finished)return;finished=true;cleanup();if(!result||!result.ok){setCloudStatus('Apps Script respondió, pero rechazó la carga. Comprueba la clave y los permisos.',true);return}if(!Array.isArray(result.trips)){setCloudStatus('La respuesta de Sheets no tiene el formato esperado.',true);return}trips=result.trips;localStorage.setItem(KEY,JSON.stringify(trips));renderAll();setCloudStatus('Cargadas '+trips.length+' jornadas desde Google Sheets.')};
- endpoint.searchParams.set('action','load');endpoint.searchParams.set('token',c.token);endpoint.searchParams.set('callback',cb);endpoint.searchParams.set('_',String(Date.now()));
- const s=document.createElement('script');s.id=cb+'_script';s.async=true;s.src=endpoint.toString();
- s.onerror=()=>{if(finished)return;finished=true;cleanup();setCloudStatus('El navegador no ha podido cargar la respuesta de Google. La URL y la clave parecen configuradas; prueba a actualizar la app y, si persiste, envíame una captura de este mensaje.',true)};
- document.body.appendChild(s);
- setTimeout(()=>{if(!finished){finished=true;cleanup();setCloudStatus('Google no ha respondido en 20 segundos. Comprueba la conexión y vuelve a intentarlo.',true)}},20000)
-}
-function syncToCloud(showStatus=true){if(!cloudConfigured()){if(showStatus)setCloudStatus('Configura primero la URL y la clave de conexión.',true);return}const c=getCloudConfig();if(showStatus)setCloudStatus('Enviando '+trips.length+' jornadas a Google Sheets…');const frameName='apneaSyncFrame';let frame=document.getElementById(frameName);if(!frame){frame=document.createElement('iframe');frame.name=frameName;frame.id=frameName;frame.style.display='none';document.body.appendChild(frame)}let form=document.getElementById('apneaSyncForm');if(form)form.remove();form=document.createElement('form');form.id='apneaSyncForm';form.method='POST';form.action=c.url;form.target=frameName;form.style.display='none';const fields={action:'save',token:c.token,payload:JSON.stringify({trips})};Object.entries(fields).forEach(([name,value])=>{const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.appendChild(input)});document.body.appendChild(form);frame.onload=()=>{if(showStatus)setCloudStatus('Solicitud enviada. Comprueba la hoja “Jornadas” y “Capturas” para confirmar que se han actualizado.')};form.submit();setTimeout(()=>form.remove(),3000)}
-$('connectSheets')?.addEventListener('click',connectCloud);
-$('loadCloud')?.addEventListener('click',loadFromCloud);
-$('syncCloud')?.addEventListener('click',()=>syncToCloud(true));
+function getPending(){try{const p=JSON.parse(localStorage.getItem(PENDING_KEY)||'{}');return {upserts:p.upserts||[],deletes:p.deletes||[]}}catch(e){return {upserts:[],deletes:[]}}}
+function setPending(p){localStorage.setItem(PENDING_KEY,JSON.stringify(p));renderPending()}
+function markDirty(id){const p=getPending();p.deletes=p.deletes.filter(x=>x!==id);if(!p.upserts.includes(id))p.upserts.push(id);setPending(p)}
+function markDeleted(id){const p=getPending();p.upserts=p.upserts.filter(x=>x!==id);if(!p.deletes.includes(id))p.deletes.push(id);setPending(p)}
+function renderPending(){const el=$('cloudPending');if(!el)return;const p=getPending(),n=p.upserts.length+p.deletes.length;el.textContent=cloudConfigured()?(n?`Cambios pendientes de subir: ${n}`:'Sin cambios pendientes de subir.'):''}
+function initCloudSettings(){const c=getCloudConfig();$('sheetsUrl').value=c.url;$('sheetsToken').value=c.token;if(c.url)setCloudStatus('Conexión configurada.');renderPending()}
+function connectCloud(){const url=$('sheetsUrl').value.trim(),token=$('sheetsToken').value.trim();if(!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(url)){setCloudStatus('La URL debe ser la de la implementación y terminar exactamente en /exec (no /dev ni /edit).',true);return}if(token.length<8){setCloudStatus('La clave debe tener al menos 8 caracteres.',true);return}localStorage.setItem(CLOUD_URL_KEY,url);localStorage.setItem(CLOUD_TOKEN_KEY,token);renderPending();testCloud()}
+async function cloudCall(action,extra={}){
+ const c=getCloudConfig(),ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),30000);let res,text;
+ try{res=await fetch(c.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,token:c.token,...extra}),redirect:'follow',cache:'no-store',signal:ctrl.signal});text=await res.text()}
+ catch(e){throw new Error(e.name==='AbortError'?'Google no ha respondido en 30 segundos. Comprueba la conexión a internet.':'No se ha podido leer la respuesta de Google. Revisa en Apps Script → Gestionar implementaciones que “Quién tiene acceso” sea “Cualquier usuario” y que la URL sea la de esa implementación. ('+e.message+')')}
+ finally{clearTimeout(timer)}
+ let r=null;try{r=JSON.parse(text)}catch(e){}
+ if(!r){const t=text.replace(/\s+/g,' ');
+  if(/accounts\.google|ServiceLogin|Iniciar sesión|Sign in/i.test(t))throw new Error('Google pide iniciar sesión: la implementación no es pública. Cambia “Quién tiene acceso” a “Cualquier usuario”.');
+  if(/Script function not found|No se ha encontrado la función/i.test(t))throw new Error('La implementación no contiene el Code.gs nuevo. Guarda el código y crea una implementación nueva.');
+  throw new Error('Respuesta inesperada de Google (HTTP '+res.status+'): '+t.slice(0,160))}
+ if(!r.ok)throw new Error(r.error||'Apps Script ha devuelto un error sin descripción.');
+ if(r.api!==CLOUD_API)throw new Error('La URL responde con un código antiguo de Apps Script. Pega el Code.gs nuevo y crea una implementación nueva.');
+ return r}
+async function testCloud(){
+ if(!cloudConfigured()){setCloudStatus('Guarda primero la URL y la clave.',true);return}
+ setCloudStatus('Probando conexión…');
+ try{const r=await cloudCall('ping');const p=getPending();setCloudStatus(`✓ Conexión correcta con la hoja «${r.sheet}» (API ${r.version}). Jornadas en Sheets: ${r.total}. Pendientes de subir: ${p.upserts.length+p.deletes.length}.`)}
+ catch(e){setCloudStatus('✗ '+e.message,true)}}
+async function syncToCloud(showStatus=true){
+ if(!cloudConfigured()){if(showStatus)setCloudStatus('Configura primero la URL y la clave.',true);return}
+ if(cloudBusy){cloudAgain=true;return}
+ const p=getPending();p.upserts=p.upserts.filter(id=>trips.some(t=>t.id===id));
+ if(!p.upserts.length&&!p.deletes.length){setPending(p);if(showStatus)setCloudStatus('No hay cambios pendientes: todo está subido.');return}
+ const upserts=trips.filter(t=>p.upserts.includes(t.id)),sentJson=new Map(upserts.map(t=>[t.id,JSON.stringify(t)])),sentDel=[...p.deletes];
+ cloudBusy=true;setCloudStatus('Subiendo cambios a Google Sheets…');
+ try{const r=await cloudCall('sync',{upserts,deletes:sentDel});
+  // Solo se marcan como subidos los registros que no han cambiado mientras se enviaban.
+  const q=getPending();q.upserts=q.upserts.filter(id=>{const t=trips.find(x=>x.id===id);return t&&(!sentJson.has(id)||sentJson.get(id)!==JSON.stringify(t))});q.deletes=q.deletes.filter(id=>!sentDel.includes(id));setPending(q);
+  setCloudStatus(`✓ Guardado en Sheets: ${r.upserted} jornada(s) subidas, ${r.deleted} eliminada(s). Total en Sheets: ${r.total}.`)}
+ catch(e){setCloudStatus('✗ No se ha podido subir (los cambios siguen guardados en este dispositivo y se reintentarán): '+e.message,true)}
+ finally{cloudBusy=false;if(cloudAgain){cloudAgain=false;syncToCloud(false)}}}
+async function loadFromCloud(showStatus=true){
+ if(!cloudConfigured()){if(showStatus)setCloudStatus('Configura primero la URL y la clave.',true);return}
+ setCloudStatus('Descargando jornadas de Google Sheets…');
+ let r;try{r=await cloudCall('list')}catch(e){setCloudStatus('✗ '+e.message,true);return}
+ if(!Array.isArray(r.trips)){setCloudStatus('✗ La respuesta no contiene jornadas.',true);return}
+ // Fusión sin pérdidas: la nube manda, salvo cambios locales aún no subidos.
+ const p=getPending(),byId=new Map();
+ r.trips.forEach(t=>{if(t&&t.id&&!p.deletes.includes(t.id))byId.set(t.id,t)});
+ let added=0;trips.forEach(t=>{if(p.upserts.includes(t.id))byId.set(t.id,t);else if(!byId.has(t.id)&&!r.trips.some(x=>x&&x.id===t.id)){byId.set(t.id,t);markDirty(t.id);added++}});
+ trips=[...byId.values()];localStorage.setItem(KEY,JSON.stringify(trips));renderAll();
+ setCloudStatus(`✓ ${r.trips.length} jornada(s) descargadas de Sheets.`+(added?` ${added} jornada(s) que solo estaban en este dispositivo se subirán ahora.`:''));
+ const q=getPending();if(q.upserts.length||q.deletes.length)await syncToCloud(true)}
+function uploadAll(){if(!cloudConfigured()){setCloudStatus('Configura primero la URL y la clave.',true);return}const p=getPending();trips.forEach(t=>{if(!p.upserts.includes(t.id))p.upserts.push(t.id)});setPending(p);syncToCloud(true)}
+$('connectSheets').addEventListener('click',connectCloud);
+$('testCloud').addEventListener('click',testCloud);
+$('loadCloud').addEventListener('click',()=>loadFromCloud(true));
+$('syncCloud').addEventListener('click',uploadAll);
 initCloudSettings();
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function num(v){return v!==''&&v!=null&&Number.isFinite(Number(v))?Number(v):null}
@@ -180,9 +219,9 @@ $('catches').addEventListener('input',e=>{let row=e.target.closest('[data-catch]
 $('catches').addEventListener('change',e=>{let row=e.target.closest('[data-catch]');if(!row)return;let c=catchDrafts.find(x=>x.id===row.dataset.catch);if(c)c[e.target.dataset.k]=e.target.value});
 function resetForm(){ $('tripForm').reset();$('editId').value='';$('formTitle').textContent='Registrar salida';$('date').value=new Date().toISOString().slice(0,10);catchDrafts=[];renderCatchRows()}
 $('cancelEdit').addEventListener('click',resetForm);
-$('tripForm').addEventListener('submit',e=>{e.preventDefault();let cs=catchDrafts.filter(c=>String(c.species||'').trim()).map(c=>({species:String(c.species).trim(),count:Math.max(1,Number(c.count)||1),weight:num(c.weight),length:num(c.length),depth:c.depth||'',activity:c.activity||'',notes:c.notes||''}));let t={id:$('editId').value||uid(),date:$('date').value,spot:$('spot').value.trim(),start:$('start').value,duration:num($('duration').value),visibility:$('visibility').value,waterTemp:num($('waterTemp').value),wind:$('wind').value,windDir:$('windDir').value,sea:$('sea').value,swell:$('swell').value,swellDir:$('swellDir').value,sky:$('sky').value,moon:$('moon').value,tide:$('tide').value,prevWind:$('prevWind').value,prevWindDir:$('prevWindDir').value,prevSea:$('prevSea').value,prevSwell:$('prevSwell').value,prevSwellDir:$('prevSwellDir').value,suit:$('suit').value,gun:$('gun').value,depthMode:$('depthMode').value,depth:num($('depth').value),sporadicActions:[$('actionSurface').checked?'Superficie':'',$('actionBottom').checked?'Fondo':''].filter(Boolean),notes:$('notes').value,noCatch:$('noCatch').value,marineActivity:$('marineActivity').value,largeSightings:[...document.querySelectorAll('input[name="sighting"]:checked')].map(x=>x.value),catches:cs};if(t.noCatch==='yes')t.catches=[];let i=trips.findIndex(x=>x.id===t.id);if(i>=0)trips[i]=t;else trips.push(t);saveTrips();resetForm();showTab('history');});
+$('tripForm').addEventListener('submit',e=>{e.preventDefault();let cs=catchDrafts.filter(c=>String(c.species||'').trim()).map(c=>({species:String(c.species).trim(),count:Math.max(1,Number(c.count)||1),weight:num(c.weight),length:num(c.length),depth:c.depth||'',activity:c.activity||'',notes:c.notes||''}));let t={id:$('editId').value||uid(),date:$('date').value,spot:$('spot').value.trim(),start:$('start').value,duration:num($('duration').value),visibility:$('visibility').value,waterTemp:num($('waterTemp').value),wind:$('wind').value,windDir:$('windDir').value,sea:$('sea').value,swell:$('swell').value,swellDir:$('swellDir').value,sky:$('sky').value,moon:$('moon').value,tide:$('tide').value,prevWind:$('prevWind').value,prevWindDir:$('prevWindDir').value,prevSea:$('prevSea').value,prevSwell:$('prevSwell').value,prevSwellDir:$('prevSwellDir').value,suit:$('suit').value,gun:$('gun').value,depthMode:$('depthMode').value,depth:num($('depth').value),sporadicActions:[$('actionSurface').checked?'Superficie':'',$('actionBottom').checked?'Fondo':''].filter(Boolean),notes:$('notes').value,noCatch:$('noCatch').value,marineActivity:$('marineActivity').value,largeSightings:[...document.querySelectorAll('input[name="sighting"]:checked')].map(x=>x.value),catches:cs};if(t.noCatch==='yes')t.catches=[];let i=trips.findIndex(x=>x.id===t.id);if(i>=0)trips[i]=t;else trips.push(t);markDirty(t.id);saveTrips();resetForm();showTab('history');});
 function editTrip(id){let t=trips.find(x=>x.id===id);if(!t)return;showTab('new');$('editId').value=t.id;$('formTitle').textContent='Editar salida';['date','spot','start','duration','visibility','waterTemp','wind','windDir','sea','swell','swellDir','sky','moon','tide','prevWind','prevWindDir','prevSea','prevSwell','prevSwellDir','suit','gun','depthMode','depth','notes','noCatch','marineActivity'].forEach(k=>{if($(k))$(k).value=t[k]??(k==='noCatch'?'auto':'')});let sightings=t.largeSightings||[];document.querySelectorAll('input[name="sighting"]').forEach(x=>x.checked=sightings.includes(x.value));let actions=t.sporadicActions||[];$('actionSurface').checked=actions.includes('Superficie');$('actionBottom').checked=actions.includes('Fondo');catchDrafts=(t.catches||[]).map(c=>({id:uid(),...c}));renderCatchRows();$('formTitle').scrollIntoView({behavior:'smooth',block:'start'})}
-function deleteTrip(id){if(!confirm('¿Eliminar esta salida?'))return;trips=trips.filter(t=>t.id!==id);saveTrips()}
+function deleteTrip(id){if(!confirm('¿Eliminar esta salida?'))return;trips=trips.filter(t=>t.id!==id);markDeleted(id);saveTrips()}
 function groupStats(key){let g={};trips.forEach(t=>{let k=key(t);if(!k)return;if(!g[k])g[k]={trips:0,fish:0,mins:0,successful:0};g[k].trips++;g[k].fish+=totalCatch(t);g[k].mins+=duration(t);if(totalCatch(t)>0)g[k].successful++});return Object.entries(g).map(([name,v])=>({name,...v,rate:v.trips?v.successful/v.trips:0,perHour:v.mins?v.fish/(v.mins/60):0,perTrip:v.fish/v.trips})).sort((a,b)=>b.perHour-a.perHour)}
 function bars(title,items,format=x=>x.toFixed(1),valueKey='perHour'){if(!items.length)return `<p class="muted">Aún no hay datos suficientes.</p>`;let max=Math.max(...items.map(x=>x[valueKey]),.01);return `<h3 style="font-size:16px;margin:0 0 12px">${title}</h3>`+items.slice(0,5).map(x=>`<div class="barrow"><div class="barlabel"><span>${esc(x.name)} <span class="muted">(${x.trips} salidas)</span></span><strong>${format(x[valueKey])}</strong></div><div class="bartrack"><div class="barfill" style="width:${Math.max(3,x[valueKey]/max*100)}%"></div></div></div>`).join('')}
 function renderInsights(){
@@ -203,9 +242,10 @@ function renderAll(){renderStats();renderRecent();renderHistory();renderInsights
 function download(name,content,type){let blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 $('exportJson').addEventListener('click',()=>download('diario-apnea-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(trips,null,2),'application/json'));
 $('exportCsv').addEventListener('click',()=>{let headers=['fecha','zona','hora_entrada','duracion_min','visibilidad_categoria','temperatura_agua_c','viento','direccion_viento','estado_mar','oleaje_m','direccion_oleaje','cielo','luna','marea','viento_dia_anterior','direccion_viento_dia_anterior','estado_mar_dia_anterior','oleaje_dia_anterior_m','direccion_oleaje_dia_anterior','traje','fusil','profundidad_pesca','profundidad_habitual_m','acciones_esporadicas','observaciones','actividad_marina','especies_grandes_avistadas','especie','cantidad','peso_kg','talla_cm','profundidad_captura','actividad_especie','observaciones_captura'];let rows=[headers];trips.forEach(t=>{let cs=t.catches?.length?t.catches:[{}];cs.forEach(c=>rows.push([t.date,t.spot,t.start,duration(t),t.visibility,t.waterTemp,t.wind,t.windDir,t.sea,t.swell,t.swellDir,t.sky,t.moon,t.tide,t.prevWind,t.prevWindDir,t.prevSea,t.prevSwell,t.prevSwellDir,t.suit,t.gun,t.depthMode,t.depth,(t.sporadicActions||[]).join(', '),t.notes,t.marineActivity,(t.largeSightings||[]).join(', '),c.species,c.count,c.weight,c.length,c.depth,c.activity,c.notes]))});let csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');download('diario-apnea-'+new Date().toISOString().slice(0,10)+'.csv','\ufeff'+csv,'text/csv;charset=utf-8')});
-$('importBtn').addEventListener('click',async()=>{let f=$('importFile').files[0];if(!f){alert('Selecciona un archivo JSON primero.');return}try{let parsed=JSON.parse(await f.text());if(!Array.isArray(parsed))throw new Error();if(!confirm('Esto sustituirá los registros actuales. ¿Continuar?'))return;trips=parsed;saveTrips();alert('Copia importada correctamente.')}catch(e){alert('No se ha podido importar. Comprueba que sea una copia JSON válida de Diario de Apnea.')}});
-$('deleteAll').addEventListener('click',()=>{if(confirm('¿Seguro que quieres borrar todas las salidas? Esta acción no se puede deshacer.')){trips=[];saveTrips();alert('Se han borrado los registros.')}});
+$('importBtn').addEventListener('click',async()=>{let f=$('importFile').files[0];if(!f){alert('Selecciona un archivo JSON primero.');return}try{let parsed=JSON.parse(await f.text());if(!Array.isArray(parsed))throw new Error();if(!confirm('Esto sustituirá los registros actuales. ¿Continuar?'))return;trips=parsed;trips.forEach(t=>{if(t&&t.id)markDirty(t.id)});saveTrips();alert('Copia importada correctamente.')}catch(e){alert('No se ha podido importar. Comprueba que sea una copia JSON válida de Diario de Apnea.')}});
+$('deleteAll').addEventListener('click',()=>{if(confirm(cloudConfigured()?'¿Seguro que quieres borrar todas las salidas de este dispositivo Y de Google Sheets? Esta acción no se puede deshacer.':'¿Seguro que quieres borrar todas las salidas? Esta acción no se puede deshacer.')){trips.forEach(t=>markDeleted(t.id));trips=[];saveTrips();alert('Se han borrado los registros.')}});
 resetForm();renderAll();
+if(cloudConfigured())loadFromCloud(false);
 </script>
 </body>
 </html>
